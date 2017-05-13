@@ -918,7 +918,7 @@ extern "C" void __sanitizer_annotate_contiguous_container(
 #endif
 
 #if !defined(_LIBCPP_HAS_NO_OFF_T_FUNCTIONS)
-#if defined(_WIN32) || defined(_NEWLIB_VERSION)
+#if defined(_WIN32) || defined(_NEWLIB_VERSION) || defined(__NuttX__)
 #define _LIBCPP_HAS_NO_OFF_T_FUNCTIONS
 #endif
 #endif
