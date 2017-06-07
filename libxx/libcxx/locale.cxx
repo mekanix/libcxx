@@ -40,6 +40,10 @@
 #pragma clang diagnostic ignored "-Wsign-conversion"
 #endif
 
+#ifndef MB_LEN_MAX
+#  define MB_LEN_MAX 32
+#endif
+
 _LIBCPP_BEGIN_NAMESPACE_STD
 
 #ifdef __cloc_defined
