@@ -102,17 +102,27 @@ echo "Installing LLVM/libcxx in the NuttX source tree"
 
 filelist=`find libxx -type f`
 
-for file in $filelist; do
-  install -D $file ${nuttx_path}/${file}
-done
-
 mkdir -p ${uclibc_incdir}
 
 filelist=`find include -type f`
+case `uname` in
+  *linux)
+    for file in $filelist; do
+      install -D $file ${nuttx_path}/${file}
+    done
+    ;;
+  *FreeBSD)
+    for file in $filelist; do
+      install -d `dirname ${nuttx_path}/${file}`
+      install ${file} `dirname ${nuttx_path}/${file}`
+    done
+    ;;
+  *)
+    echo "Not support host OS"
+    exit 1
+    ;;
+esac
 
-for file in $filelist; do
-  install -D $file ${nuttx_path}/${file}
-done
 
 echo "Installation suceeded"
 echo ""
