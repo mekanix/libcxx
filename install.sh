@@ -1,4 +1,25 @@
-#!/bin/bash
+#!/bin/sh
+
+install_directory() {
+  filelist=`find $1 -type f`
+  case `uname` in
+    *linux)
+      for file in $filelist; do
+        install -D $file ${nuttx_path}/${file}
+      done
+      ;;
+    *FreeBSD)
+      for file in $filelist; do
+        install -d `dirname ${nuttx_path}/${file}`
+        install ${file} `dirname ${nuttx_path}/${file}`
+      done
+      ;;
+    *)
+      echo "Not support host OS"
+      exit 1
+      ;;
+  esac
+}
 
 usage="USAGE: $0 <full path to the NuttX directory>"
 
@@ -100,28 +121,11 @@ fi
 
 echo "Installing LLVM/libcxx in the NuttX source tree"
 
-filelist=`find libxx -type f`
+install_directory include
+install_directory libxx
 
 mkdir -p ${uclibc_incdir}
 
-filelist=`find include -type f`
-case `uname` in
-  *linux)
-    for file in $filelist; do
-      install -D $file ${nuttx_path}/${file}
-    done
-    ;;
-  *FreeBSD)
-    for file in $filelist; do
-      install -d `dirname ${nuttx_path}/${file}`
-      install ${file} `dirname ${nuttx_path}/${file}`
-    done
-    ;;
-  *)
-    echo "Not support host OS"
-    exit 1
-    ;;
-esac
 
 
 echo "Installation suceeded"
