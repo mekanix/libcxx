@@ -5,14 +5,18 @@
 #ifndef _MACHINE__DEFAULT_TYPES_H
 #define _MACHINE__DEFAULT_TYPES_H
 
+#ifndef __clang__
 #include <sys/features.h>
+#endif
 
 /*
  * Guess on types by examining *_MIN / *_MAX defines.
  */
+#ifndef __clang__
 #if __GNUC_PREREQ (3, 3)
 /* GCC >= 3.3.0 has __<val>__ implicitly defined. */
 #define __EXP(x) __##x##__
+#endif
 #else
 /* Fall back to POSIX versions from <limits.h> */
 #define __EXP(x) x
