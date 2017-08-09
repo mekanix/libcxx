@@ -1,4 +1,22 @@
-#!/bin/bash
+#!/bin/sh
+
+install_cmd() {
+  file_to_install=${1}
+  install_path=${2}
+  case `uname` in
+    *linux)
+      install -D ${file_to_install} ${install_path}
+      ;;
+    *BSD)
+      install -d `dirname ${install_path}`
+      install ${file_to_install} `dirname ${install_path}`
+      ;;
+    *)
+      echo "Not support host OS"
+      exit 1
+      ;;
+  esac
+}
 
 usage="USAGE: $0 <full path to the NuttX directory>"
 
@@ -115,7 +133,7 @@ for file in $filelist; do
   else
     endfile=${file}
   fi
-  install -D ${file} ${nuttx_path}/libxx/libcxx/${endfile#src/}
+  install_cmd ${file} ${nuttx_path}/libxx/libcxx/${endfile#src/}
 done
 
 mkdir -p ${libcxx_incdir}
@@ -123,13 +141,13 @@ mkdir -p ${libcxx_incdir}
 filelist=`find include -type f`
 
 for file in $filelist; do
-  install -D ${file} ${nuttx_path}/include/libcxx/${file#include/}
+  install_cmd ${file} ${nuttx_path}/include/libcxx/${file#include/}
 done
 
 filelist=`find machine -type f`
 
 for file in $filelist; do
-  install -D ${file} ${nuttx_path}/include/${file}
+  install_cmd ${file} ${nuttx_path}/include/${file}
 done
 
 echo "Installation suceeded"
