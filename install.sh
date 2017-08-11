@@ -9,7 +9,7 @@ install_cmd() {
       ;;
     *BSD)
       install -d `dirname ${install_path}`
-      install ${file_to_install} `dirname ${install_path}`
+      install -m 0644 ${file_to_install} `dirname ${install_path}`
       ;;
     *)
       echo "Not support host OS"
